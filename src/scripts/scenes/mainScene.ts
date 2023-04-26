@@ -15,10 +15,22 @@ export default class MainScene extends Phaser.Scene {
   }
 
   async create() {
-    this.container = new Container(this)
+    this.container = new Container(this, {
+      onClick: pointer => {
+        this.bobizs.push(
+          new Bobiz(this, {
+            x: pointer.x,
+            y: pointer.y,
+            variant: Math.ceil(Math.random() * 3)
+          })
+        )
+      }
+    })
     this.waterlevel = 100
     this.surface = new Surface(this, this.waterlevel)
-    this.bobizs = Array.from({ length: 10 }).map(
+
+    // initialize
+    this.bobizs = Array.from({ length: 3 }).map(
       () =>
         new Bobiz(this, {
           x: this.cameras.main.width / 2 + (Math.random() - 0.5) * (Container.WIDTH - 40),
@@ -26,9 +38,8 @@ export default class MainScene extends Phaser.Scene {
           variant: Math.ceil(Math.random() * 3)
         })
     )
-    this.bobizs.forEach(bobiz => {
-      this.physics.add.collider(bobiz, this.container)
-    })
+
+    // record fps in debug mode
     this.fpsText = new FpsText(this)
   }
 
