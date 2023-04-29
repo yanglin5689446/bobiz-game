@@ -1,6 +1,7 @@
 import Bobiz from '../objects/bobiz'
 import Container from '../objects/container'
 import FpsText from '../objects/fpsText'
+import SeedsText from '../objects/seedsText'
 import Surface from '../objects/surface'
 
 export default class MainScene extends Phaser.Scene {
@@ -9,35 +10,35 @@ export default class MainScene extends Phaser.Scene {
   container
   surface
   waterlevel: number
+  seeds
+  frameCounter: number
 
   constructor() {
     super({ key: 'MainScene' })
+    this.bobizs = []
+    this.frameCounter = 0
   }
 
   async create() {
     this.container = new Container(this, {
       onClick: pointer => {
+        if (this.seeds.amount < 1) return
+
         this.bobizs.push(
           new Bobiz(this, {
+            capacity: 0,
             x: pointer.x,
             y: pointer.y,
             variant: Math.ceil(Math.random() * 3)
           })
         )
+        this.seeds.update(-1)
       }
     })
     this.waterlevel = 100
     this.surface = new Surface(this, this.waterlevel)
 
-    // initialize
-    this.bobizs = Array.from({ length: 3 }).map(
-      () =>
-        new Bobiz(this, {
-          x: this.cameras.main.width / 2 + (Math.random() - 0.5) * (Container.WIDTH - 40),
-          y: this.cameras.main.height / 2 + (Math.random() - 0.5) * (Container.HEIGHT - 40),
-          variant: Math.ceil(Math.random() * 3)
-        })
-    )
+    this.seeds = new SeedsText(this, 10)
 
     // record fps in debug mode
     this.fpsText = new FpsText(this)
@@ -45,6 +46,7 @@ export default class MainScene extends Phaser.Scene {
 
   async update() {
     this.fpsText.update()
+    this.seeds.update(+0.001)
 
     // update water level
     let newWaterlevel = 100 - this.game.loop.frame / 300
@@ -54,6 +56,7 @@ export default class MainScene extends Phaser.Scene {
     // update bobiz bonding box
     const newWaterlevelY = (Container.HEIGHT * newWaterlevel) / 100
     this.bobizs.forEach(bobiz => {
+      bobiz.feed(0.25)
       // type check to shut typescript warnings
       if (bobiz.body && 'setBoundsRectangle' in bobiz.body)
         bobiz.body.setBoundsRectangle(

@@ -6,6 +6,10 @@ export default class PreloadScene extends Phaser.Scene {
   preload() {
     this.load.image('container', 'assets/img/container.png')
     this.load.image('surface', 'assets/img/surface.png')
+    this.load.image('bobiz-stage-0', 'assets/img/bobiz-stage-0.png')
+    this.load.image('bobiz-stage-1', 'assets/img/bobiz-stage-1.png')
+    this.load.image('bobiz-stage-2', 'assets/img/bobiz-stage-2.png')
+    this.load.image('bobiz-stage-3', 'assets/img/bobiz-stage-3.png')
     this.load.image('bobiz-1', 'assets/img/bobiz-1.png')
     this.load.image('bobiz-2', 'assets/img/bobiz-2.png')
     this.load.image('bobiz-3', 'assets/img/bobiz-3.png')
