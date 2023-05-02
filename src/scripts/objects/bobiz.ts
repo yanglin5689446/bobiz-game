@@ -18,6 +18,13 @@ export default class Bobiz extends Phaser.Physics.Arcade.Image {
 
     this.setVelocity((Math.random() - 0.5) * (5 + 45 * Math.random()), (Math.random() - 0.5) * (5 + 45 * Math.random()))
     this.setAngularVelocity((Math.random() - 0.5) * 100)
+
+    this.setInteractive().on('pointerup', () => {
+      const stage = Math.ceil(this.capacity / Bobiz.AMOUNT_PER_STAGE)
+      if (stage === 4) {
+        console.log('harvest')
+      }
+    })
   }
 
   feed(amount) {

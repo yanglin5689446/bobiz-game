@@ -1,7 +1,7 @@
 export default class SeedsText extends Phaser.GameObjects.Text {
   amount: number
   constructor(scene, amount) {
-    super(scene, scene.cameras.main.width / 2, 50, '', { color: 'black', fontSize: '20px' })
+    super(scene, scene.cameras.main.width / 2 - 100, 50, '', { color: 'black', fontSize: '20px' })
     scene.add.existing(this)
     this.setOrigin(0.5)
     this.amount = amount
