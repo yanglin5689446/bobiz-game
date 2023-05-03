@@ -19,7 +19,7 @@ export default class Container extends Phaser.GameObjects.Container {
     super(
       scene,
       (scene.cameras.main.width - Container.WIDTH) / 2,
-      (scene.cameras.main.height - Container.HEIGHT + 100) / 2
+      (scene.cameras.main.height - Container.HEIGHT + 200) / 2
     )
     scene.add.existing(this)
     scene.physics.add.existing(this)
