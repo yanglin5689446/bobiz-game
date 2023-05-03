@@ -39,6 +39,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
     "phaser": "^3.55.2"
   },
   "devDependencies": {

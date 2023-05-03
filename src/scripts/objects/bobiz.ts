@@ -1,17 +1,23 @@
+import * as bobizsActions from '../state/bobizs'
+import * as bobizCoinActions from '../state/bobizCoin'
+import { dispatch } from '../state'
+
 export default class Bobiz extends Phaser.Physics.Arcade.Image {
   static MAX_CAPACITY = 1000
   static AMOUNT_PER_STAGE = 250
 
-  capacity: number
+  id
+  absorbed: number
   variant: number
-  constructor(scene, { x, y, variant, capacity }) {
-    const stage = Math.ceil(capacity / Bobiz.AMOUNT_PER_STAGE)
+  constructor(scene, { id, x, y, variant, absorbed }) {
+    const stage = Math.ceil(absorbed / Bobiz.AMOUNT_PER_STAGE)
     super(scene, x, y, `bobiz-${stage === 4 ? variant : `stage-${stage}`}`)
 
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
-    this.capacity = capacity
+    this.id = id
+    this.absorbed = absorbed
     this.variant = variant
 
     this.setCollideWorldBounds(true).setBounce(1)
@@ -20,17 +26,18 @@ export default class Bobiz extends Phaser.Physics.Arcade.Image {
     this.setAngularVelocity((Math.random() - 0.5) * 100)
 
     this.setInteractive().on('pointerup', () => {
-      const stage = Math.ceil(this.capacity / Bobiz.AMOUNT_PER_STAGE)
+      const stage = Math.ceil(this.absorbed / Bobiz.AMOUNT_PER_STAGE)
       if (stage === 4) {
-        console.log('harvest')
+        dispatch(bobizsActions.harvest(id))
+        dispatch(bobizCoinActions.add(10))
       }
     })
   }
 
   feed(amount) {
-    this.capacity += amount
-    if (this.capacity >= Bobiz.MAX_CAPACITY) this.capacity = Bobiz.MAX_CAPACITY
-    const stage = Math.ceil(this.capacity / Bobiz.AMOUNT_PER_STAGE)
+    this.absorbed += amount
+    if (this.absorbed >= Bobiz.MAX_CAPACITY) this.absorbed = Bobiz.MAX_CAPACITY
+    const stage = Math.ceil(this.absorbed / Bobiz.AMOUNT_PER_STAGE)
     this.setTexture(`bobiz-${stage === 4 ? this.variant : `stage-${stage}`}`)
     this.setSize(8 * (stage + 1), 8 * (stage + 1))
     this.setDisplaySize(8 * (stage + 1), 8 * (stage + 1))
