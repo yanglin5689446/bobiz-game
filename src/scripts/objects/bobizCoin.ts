@@ -1,7 +1,4 @@
-import { dispatch, getState, store } from '../state'
-import * as bobizCoinActions from '../state/bobizCoin'
-import * as seedsActions from '../state/seeds'
-
+import { store } from '../state'
 export default class BobizCoin extends Phaser.GameObjects.Container {
   amount: number
   unsubscribe: () => void
@@ -38,9 +35,7 @@ export default class BobizCoin extends Phaser.GameObjects.Container {
     updater()
     // subscribe to redux
     this.unsubscribe = store.subscribe(updater)
-  }
 
-  public destroy() {
-    this.unsubscribe()
+    this.on('destroy', () => this.unsubscribe)
   }
 }

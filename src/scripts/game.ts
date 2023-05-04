@@ -1,6 +1,8 @@
 import 'phaser'
 import MainScene from './scenes/mainScene'
+import ShopScene from './scenes/shopScene'
 import PreloadScene from './scenes/preloadScene'
+import CatalogScene from './scenes/catalogScene'
 
 const DEFAULT_WIDTH = 440
 const DEFAULT_HEIGHT = 800
@@ -15,7 +17,7 @@ const config = {
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT
   },
-  scene: [PreloadScene, MainScene],
+  scene: [PreloadScene, MainScene, ShopScene, CatalogScene],
   physics: {
     default: 'arcade',
     arcade: {

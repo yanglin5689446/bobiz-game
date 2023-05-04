@@ -57,9 +57,6 @@ export default class Seeds extends Phaser.GameObjects.Container {
     updater()
     // subscribe to redux
     this.unsubscribe = store.subscribe(updater)
-  }
-
-  public destroy() {
-    this.unsubscribe()
+    this.on('destory', () => this.unsubscribe())
   }
 }

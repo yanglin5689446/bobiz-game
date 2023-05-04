@@ -85,6 +85,7 @@ export default class Container extends Phaser.GameObjects.Container {
     updater()
     // subscribe to redux
     this.unsubscribe = store.subscribe(updater)
+    this.on('destory', () => this.unsubscribe())
   }
   setCapacity(capacity) {
     this.capacity = capacity
@@ -112,8 +113,5 @@ export default class Container extends Phaser.GameObjects.Container {
           )
         )
     })
-  }
-  destroy(): void {
-    this.unsubscribe()
   }
 }

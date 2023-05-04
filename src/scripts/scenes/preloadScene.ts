@@ -1,4 +1,5 @@
 export default class PreloadScene extends Phaser.Scene {
+  unsubscribe
   constructor() {
     super({ key: 'PreloadScene' })
   }
@@ -15,6 +16,9 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image('bobiz-3', 'assets/img/bobiz-3.png')
     this.load.image('coin', 'assets/img/coin.png')
     this.load.image('seed-bag', 'assets/img/seed-bag.png')
+    this.load.image('shop', 'assets/img/shop.png')
+    this.load.image('catalog', 'assets/img/catalog.png')
+    this.load.image('back', 'assets/img/back.png')
   }
 
   create() {

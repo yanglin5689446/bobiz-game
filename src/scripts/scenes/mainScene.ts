@@ -3,6 +3,8 @@ import FpsText from '../objects/fpsText'
 import Seeds from '../objects/seeds'
 import BobizCoinText from '../objects/bobizCoin'
 import { getState } from '../state'
+import Shop from '../objects/shop'
+import Catalog from '../objects/catalog'
 
 export default class MainScene extends Phaser.Scene {
   fpsText
@@ -10,6 +12,8 @@ export default class MainScene extends Phaser.Scene {
   seeds
   bobizCoin
   buySeed
+  shop
+  catalog
 
   constructor() {
     super({ key: 'MainScene' })
@@ -19,6 +23,8 @@ export default class MainScene extends Phaser.Scene {
     this.container = new Container(this)
     this.seeds = new Seeds(this)
     this.bobizCoin = new BobizCoinText(this)
+    this.shop = new Shop(this)
+    this.catalog = new Catalog(this)
 
     // initial fetch
     this.fetchAndUpdate()
