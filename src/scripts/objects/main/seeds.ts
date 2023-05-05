@@ -1,6 +1,6 @@
-import { dispatch, getState, store } from '../state'
-import * as bobizCoinActions from '../state/bobizCoin'
-import * as seedsActions from '../state/seeds'
+import { dispatch, getState, store } from '../../state'
+import * as bobizCoinActions from '../../state/bobizCoin'
+import * as seedsActions from '../../state/seeds'
 
 export default class Seeds extends Phaser.GameObjects.Container {
   amount: number

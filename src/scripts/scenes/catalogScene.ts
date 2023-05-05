@@ -1,4 +1,4 @@
-import BackToGame from '../objects/backToGame'
+import BackToGame from '../objects/shared/backToGame'
 
 export default class CatalogScene extends Phaser.Scene {
   back

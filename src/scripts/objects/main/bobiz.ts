@@ -1,6 +1,6 @@
-import * as bobizsActions from '../state/bobizs'
-import * as bobizCoinActions from '../state/bobizCoin'
-import { dispatch } from '../state'
+import * as bobizsActions from '../../state/bobizs'
+import * as bobizCoinActions from '../../state/bobizCoin'
+import { dispatch } from '../../state'
 
 export default class Bobiz extends Phaser.Physics.Arcade.Image {
   static MAX_CAPACITY = 1000

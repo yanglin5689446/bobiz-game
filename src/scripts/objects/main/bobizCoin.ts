@@ -1,4 +1,4 @@
-import { store } from '../state'
+import { store } from '../../state'
 export default class BobizCoin extends Phaser.GameObjects.Container {
   amount: number
   unsubscribe: () => void
