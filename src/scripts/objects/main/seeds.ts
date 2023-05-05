@@ -12,7 +12,7 @@ export default class Seeds extends Phaser.GameObjects.Container {
   buyButtonText
 
   constructor(scene) {
-    super(scene, scene.cameras.main.width - 150, 20)
+    super(scene, scene.cameras.main.width - 150, 80)
     scene.add.existing(this)
 
     this.border = new Phaser.GameObjects.Graphics(scene)
@@ -28,24 +28,6 @@ export default class Seeds extends Phaser.GameObjects.Container {
     this.text = new Phaser.GameObjects.Text(scene, 105, 25, '0', { color: 'black', fontSize: '28px' })
     this.text.setOrigin(1, 0.5)
     this.add(this.text)
-
-    this.buyButton = new Phaser.GameObjects.Graphics(scene)
-    this.buyButton.fillStyle(0xffffff, 1)
-    this.buyButton.strokeRoundedRect(100, -10, 30, 25, 5)
-    this.buyButton.fillRoundedRect(101, -9, 28, 23, 5)
-    this.add(this.buyButton)
-
-    this.buyButtonText = new Phaser.GameObjects.Text(scene, 115, 3, '$5', { color: 'black', fontSize: '16px' })
-    this.buyButtonText.setOrigin(0.5)
-    this.buyButtonText.setPadding(5, 10, 5, 10)
-    this.buyButtonText.setInteractive().on('pointerdown', () => {
-      const state = getState()
-      if (state.bobizCoin.amount < 5) return
-
-      dispatch(seedsActions.update(state.seeds.amount + 1))
-      dispatch(bobizCoinActions.add(-5))
-    })
-    this.add(this.buyButtonText)
 
     const updater = () => {
       const state = store.getState()

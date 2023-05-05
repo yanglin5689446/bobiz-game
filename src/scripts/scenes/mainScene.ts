@@ -1,10 +1,10 @@
 import Container from '../objects/main/container'
 import FpsText from '../objects/main/fpsText'
 import Seeds from '../objects/main/seeds'
-import BobizCoinText from '../objects/main/bobizCoin'
+import BobizCoinText from '../objects/shared/bobizCoin'
+import Catalog from '../objects/main/catalog'
 import { getState } from '../state'
 import Shop from '../objects/main/shop'
-import Catalog from '../objects/main/catalog'
 
 export default class MainScene extends Phaser.Scene {
   fpsText

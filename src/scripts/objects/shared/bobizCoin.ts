@@ -7,7 +7,7 @@ export default class BobizCoin extends Phaser.GameObjects.Container {
   text
 
   constructor(scene) {
-    super(scene, scene.cameras.main.width - 150, 80)
+    super(scene, scene.cameras.main.width - 150, 20)
     scene.add.existing(this)
 
     this.border = new Phaser.GameObjects.Graphics(scene)
@@ -36,6 +36,9 @@ export default class BobizCoin extends Phaser.GameObjects.Container {
     // subscribe to redux
     this.unsubscribe = store.subscribe(updater)
 
-    this.on('destroy', () => this.unsubscribe)
+    this.on('destroy', () => {
+      console.log('destroyed')
+      this.unsubscribe()
+    })
   }
 }
