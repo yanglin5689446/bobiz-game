@@ -1,20 +1,24 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-export const create = createAsyncThunk('bobiz/create', async () => {
-  // @todo: connect API
-  return {
-    id: Math.floor(Math.random() * 1e9).toString(),
-    variant: Math.ceil(Math.random() * 3),
-    absorbed: 0,
-    capacity: 1000
-  }
-})
+const API_SERVER = process.env.API_SERVER
 
-export const harvest = createAsyncThunk<{ id: string }, string>('bobiz/harvest', async id => {
-  // @todo: connect API
-  return {
-    id
+export const create = createAsyncThunk('bobiz/create', async () =>
+  fetch(`${API_SERVER}/users/0xe28cf314a7908411/bobizs`, {
+    method: 'POST'
+  })
+    .then(response => response.json())
+    .then(res => Promise.resolve(res.data))
+)
+
+export const harvest = createAsyncThunk<string | undefined, string>('bobiz/harvest', async id => {
+  try {
+    await fetch(`${API_SERVER}/users/0xe28cf314a7908411/bobizs/${id}`, {
+      method: 'POST'
+    }).then(response => response.json())
+  } catch (e) {
+    return undefined
   }
+  return id
 })
 
 interface BobizProperty {
@@ -36,7 +40,7 @@ export const bobizsSlice = createSlice({
   initialState,
   reducers: {
     update(state, action) {
-      return action.payload
+      state.entities = action.payload
     }
   },
   extraReducers: builder => {
@@ -46,7 +50,7 @@ export const bobizsSlice = createSlice({
       }
     })
     builder.addCase(harvest.fulfilled, (state, action) => {
-      delete state.entities[action.payload.id]
+      if (action.payload) delete state.entities[action.payload]
     })
   }
 })

@@ -5,7 +5,7 @@ export interface BobizCoinState {
 }
 
 const initialState: BobizCoinState = {
-  amount: 100
+  amount: 0
 }
 
 export const bobizCoinSlice = createSlice({

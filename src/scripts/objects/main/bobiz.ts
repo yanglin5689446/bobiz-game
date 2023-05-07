@@ -3,22 +3,25 @@ import * as bobizCoinActions from '../../state/bobizCoin'
 import { dispatch } from '../../state'
 
 export default class Bobiz extends Phaser.Physics.Arcade.Image {
-  static MAX_CAPACITY = 1000
-  static AMOUNT_PER_STAGE = 250
-
   id
   absorbed: number
   variant: number
-  constructor(scene, { id, x, y, variant, absorbed }) {
-    const stage = Math.ceil(absorbed / Bobiz.AMOUNT_PER_STAGE)
+  capacity: number
+  amountRequiredPerStage: number
+
+  constructor(scene, { id, x, y, variant, capacity, absorbed }) {
+    const amountRequiredPerStage = capacity / 4
+    const stage = Math.ceil(absorbed / amountRequiredPerStage)
     super(scene, x, y, `bobiz-${stage === 4 ? variant : `stage-${stage}`}`)
 
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
+    this.amountRequiredPerStage = amountRequiredPerStage
     this.id = id
     this.absorbed = absorbed
     this.variant = variant
+    this.capacity = capacity
 
     this.setCollideWorldBounds(true).setBounce(1)
 
@@ -26,20 +29,17 @@ export default class Bobiz extends Phaser.Physics.Arcade.Image {
     this.setAngularVelocity((Math.random() - 0.5) * 100)
 
     this.setInteractive().on('pointerup', () => {
-      const stage = Math.ceil(this.absorbed / Bobiz.AMOUNT_PER_STAGE)
+      const stage = Math.ceil(this.absorbed / amountRequiredPerStage)
       if (stage === 4) {
         dispatch(bobizsActions.harvest(id))
-        dispatch(bobizCoinActions.add(10))
       }
     })
   }
 
-  feed(amount) {
-    this.absorbed += amount
-    if (this.absorbed >= Bobiz.MAX_CAPACITY) this.absorbed = Bobiz.MAX_CAPACITY
-    const stage = Math.ceil(this.absorbed / Bobiz.AMOUNT_PER_STAGE)
+  update(amount) {
+    this.absorbed = amount
+    if (this.absorbed >= this.capacity) this.absorbed = this.capacity
+    const stage = Math.ceil(this.absorbed / this.amountRequiredPerStage)
     this.setTexture(`bobiz-${stage === 4 ? this.variant : `stage-${stage}`}`)
-    this.setSize(8 * (stage + 1), 8 * (stage + 1))
-    this.setDisplaySize(8 * (stage + 1), 8 * (stage + 1))
   }
 }

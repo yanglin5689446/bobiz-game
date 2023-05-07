@@ -53,11 +53,7 @@ export default class Seeds10x extends Phaser.GameObjects.Container {
     this.buyButtonText.setOrigin(0.5)
     this.buyButtonText.setPadding(20, 10, 20, 10)
     this.buyButtonText.setInteractive().on('pointerdown', () => {
-      const state = getState()
-      if (state.bobizCoin.amount < 50) return
-
-      dispatch(seedsActions.update(state.seeds.amount + 10))
-      dispatch(bobizCoinActions.add(-50))
+      dispatch(seedsActions.buy(10))
     })
     this.add(this.buyButtonText)
 

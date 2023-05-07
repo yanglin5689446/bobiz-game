@@ -29,11 +29,7 @@ export default class Seeds5x extends Phaser.GameObjects.Container {
     this.text.setOrigin(0, 0.5)
     this.text.setPadding(5, 10, 5, 10)
     this.text.setInteractive().on('pointerdown', () => {
-      const state = getState()
-      if (state.bobizCoin.amount < 5) return
-
-      dispatch(seedsActions.update(state.seeds.amount + 1))
-      dispatch(bobizCoinActions.add(-5))
+      dispatch(seedsActions.buy(5))
     })
     this.add(this.text)
 

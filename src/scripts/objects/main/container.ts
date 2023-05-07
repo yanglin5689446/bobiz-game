@@ -64,19 +64,23 @@ export default class Container extends Phaser.GameObjects.Container {
           delete this.bobizs[id]
         }
       })
-      // create new bobiz entities
-      Object.entries(state.bobizs.entities).map(([id, value]) => {
+      // create new bobiz entities & update existing entities
+      Object.entries(state.bobizs.entities).forEach(([id, value]) => {
         if (!this.bobizs[id]) {
+          const x = this.bobizCreationBuffer ? this.bobizCreationBuffer.x - this.x : Math.random() * Container.WIDTH
+          const y = this.bobizCreationBuffer ? this.bobizCreationBuffer.y - this.y : Math.random() * Container.HEIGHT
           this.bobizs[id] = new Bobiz(this.scene, {
-            id,
             ...value,
-            x: (this.bobizCreationBuffer?.x || 0) - this.x,
-            y: (this.bobizCreationBuffer?.y || 0) - this.y
+            id,
+            x,
+            y
           })
           this.add(this.bobizs[id])
           this.scene.physics.add.existing(this.bobizs[id])
 
           this.bobizCreationBuffer = undefined
+        } else {
+          this.bobizs[id].update(state.bobizs.entities[id].absorbed)
         }
       })
     }
@@ -85,8 +89,9 @@ export default class Container extends Phaser.GameObjects.Container {
     updater()
     // subscribe to redux
     this.unsubscribe = store.subscribe(updater)
-    this.on('destory', () => this.unsubscribe())
+    this.on('destroy', () => this.unsubscribe())
   }
+
   setCapacity(capacity) {
     this.capacity = capacity
   }
@@ -100,8 +105,6 @@ export default class Container extends Phaser.GameObjects.Container {
     this.updateVolume()
     // update bobiz bounding box
     Object.values(this.bobizs).forEach(bobiz => {
-      // @todo: remove this after API integrated
-      bobiz.feed(0.25)
       // type check to shut typescript warnings
       if (bobiz.body && 'setBoundsRectangle' in bobiz.body)
         bobiz.body.setBoundsRectangle(

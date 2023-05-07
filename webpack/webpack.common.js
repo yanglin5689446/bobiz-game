@@ -1,4 +1,5 @@
 const path = require('path')
+const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -28,6 +29,7 @@ module.exports = {
     }
   },
   plugins: [
+    new Dotenv(),
     new HtmlWebpackPlugin({ gameName: 'Bob!z', template: 'src/index.html' }),
     new CopyWebpackPlugin({
       patterns: [

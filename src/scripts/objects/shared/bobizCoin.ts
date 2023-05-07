@@ -36,9 +36,6 @@ export default class BobizCoin extends Phaser.GameObjects.Container {
     // subscribe to redux
     this.unsubscribe = store.subscribe(updater)
 
-    this.on('destroy', () => {
-      console.log('destroyed')
-      this.unsubscribe()
-    })
+    this.on('destroy', () => this.unsubscribe())
   }
 }
