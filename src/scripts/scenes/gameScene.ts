@@ -12,6 +12,7 @@ import * as catalogActions from '../state/catalog'
 
 const API_SERVER = process.env.API_SERVER
 
+const debugMode = process.env.DEBUG === 'true'
 export default class GameScene extends Phaser.Scene {
   fpsText
   container
@@ -46,7 +47,7 @@ export default class GameScene extends Phaser.Scene {
     })
 
     // record fps in debug mode
-    this.fpsText = new FpsText(this)
+    if (debugMode) this.fpsText = new FpsText(this)
   }
 
   async fetchAndUpdate() {
@@ -72,7 +73,7 @@ export default class GameScene extends Phaser.Scene {
 
   async update() {
     if (!this.initialized) return
-    this.fpsText.update()
     this.container.update()
+    if (debugMode) this.fpsText.update()
   }
 }
