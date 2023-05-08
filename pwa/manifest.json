@@ -1,6 +1,6 @@
 {
-  "short_name": "Phaser Game",
-  "name": "My Cool Phaser 3 Game",
+  "short_name": "Bob!z",
+  "name": "Bob!z",
   "icons": [
     {
       "src": "./icons/icons-192.png",
@@ -16,7 +16,7 @@
   "start_url": "./index.html",
   "background_color": "#e6e6e6",
   "display": "fullscreen",
-  "orientation": "landscape",
+  "orientation": "portrait",
   "scope": "./",
   "theme_color": "#000000"
 }
