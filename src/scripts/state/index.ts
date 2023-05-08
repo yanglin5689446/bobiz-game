@@ -4,9 +4,11 @@ import bobizCoin from './bobizCoin'
 import container from './container'
 import seeds from './seeds'
 import user from './user'
+import catalog from './catalog'
 
 export const store = configureStore({
   reducer: {
+    catalog,
     user,
     bobizs,
     bobizCoin,
