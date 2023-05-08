@@ -29,7 +29,9 @@ module.exports = {
     }
   },
   plugins: [
-    new Dotenv(),
+    new Dotenv({
+      systemvars: true
+    }),
     new HtmlWebpackPlugin({ gameName: 'Bob!z', template: 'src/index.html' }),
     new CopyWebpackPlugin({
       patterns: [

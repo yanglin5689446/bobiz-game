@@ -23,8 +23,8 @@ export default class Back extends Phaser.GameObjects.Container {
     this.text.setPadding(60, 10, 15, 10)
     this.text.setInteractive().on('pointerdown', () => {
       this.scene.scene.stop()
-      this.scene.scene.setVisible(true, 'MainScene')
-      this.scene.scene.resume('MainScene')
+      this.scene.scene.setVisible(true, 'GameScene')
+      this.scene.scene.resume('GameScene')
     })
     this.add(this.text)
   }

@@ -2,8 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const API_SERVER = process.env.API_SERVER
 
-export const buy = createAsyncThunk<number, number>('seeds/buy', async amount => {
-  return fetch(`${API_SERVER}/users/0xe28cf314a7908411/seeds`, {
+export const buy = createAsyncThunk<number, number>('seeds/buy', async (amount, { getState }) => {
+  const state: any = getState()
+  return fetch(`${API_SERVER}/users/${state.user.addr}/seeds`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

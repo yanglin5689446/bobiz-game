@@ -23,7 +23,7 @@ export default class Catalog extends Phaser.GameObjects.Container {
     this.text.setPadding(50, 10, 15, 10)
     this.text.setInteractive().on('pointerdown', () => {
       this.scene.scene.pause()
-      this.scene.scene.setVisible(false, 'MainScene')
+      this.scene.scene.setVisible(false, 'GameScene')
       this.scene.scene.launch('CatalogScene')
     })
     this.add(this.text)

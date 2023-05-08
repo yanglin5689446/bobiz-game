@@ -1,4 +1,4 @@
-export default class Store extends Phaser.GameObjects.Container {
+export default class Shop extends Phaser.GameObjects.Container {
   border
   icon
   text
@@ -24,7 +24,7 @@ export default class Store extends Phaser.GameObjects.Container {
 
     this.text.setInteractive().on('pointerdown', () => {
       this.scene.scene.pause()
-      this.scene.scene.setVisible(false, 'MainScene')
+      this.scene.scene.setVisible(false, 'GameScene')
       this.scene.scene.launch('ShopScene')
     })
     this.add(this.text)

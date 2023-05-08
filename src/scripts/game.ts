@@ -1,5 +1,7 @@
 import 'phaser'
-import MainScene from './scenes/mainScene'
+import * as fcl from '@onflow/fcl'
+import ConnectWalletScene from './scenes/connectWalletScene'
+import GameScene from './scenes/gameScene'
 import ShopScene from './scenes/shopScene'
 import PreloadScene from './scenes/preloadScene'
 import CatalogScene from './scenes/catalogScene'
@@ -17,7 +19,7 @@ const config = {
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT
   },
-  scene: [PreloadScene, MainScene, ShopScene, CatalogScene],
+  scene: [PreloadScene, ConnectWalletScene, GameScene, ShopScene, CatalogScene],
   physics: {
     default: 'arcade',
     arcade: {
@@ -28,5 +30,9 @@ const config = {
 }
 
 window.addEventListener('load', () => {
+  fcl
+    .config()
+    .put('accessNode.api', 'https://access-testnet.onflow.org')
+    .put('challenge.handshake', 'https://flow-wallet-testnet.blocto.app/authn')
   const game = new Phaser.Game(config)
 })

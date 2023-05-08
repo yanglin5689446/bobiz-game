@@ -2,17 +2,19 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 const API_SERVER = process.env.API_SERVER
 
-export const create = createAsyncThunk('bobiz/create', async () =>
-  fetch(`${API_SERVER}/users/0xe28cf314a7908411/bobizs`, {
+export const create = createAsyncThunk('bobiz/create', async (_, { getState }) => {
+  const state: any = getState()
+  return fetch(`${API_SERVER}/users/${state.user.addr}/bobizs`, {
     method: 'POST'
   })
     .then(response => response.json())
     .then(res => Promise.resolve(res.data))
-)
+})
 
-export const harvest = createAsyncThunk<string | undefined, string>('bobiz/harvest', async id => {
+export const harvest = createAsyncThunk<string | undefined, string>('bobiz/harvest', async (id, { getState }) => {
+  const state: any = getState()
   try {
-    await fetch(`${API_SERVER}/users/0xe28cf314a7908411/bobizs/${id}`, {
+    await fetch(`${API_SERVER}/users/${state.user.addr}/bobizs/${id}`, {
       method: 'POST'
     }).then(response => response.json())
   } catch (e) {

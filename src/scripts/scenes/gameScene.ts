@@ -1,17 +1,17 @@
-import { dispatch } from '../state'
-import Container from '../objects/main/container'
-import FpsText from '../objects/main/fpsText'
-import Seeds from '../objects/main/seeds'
+import { dispatch, getState } from '../state'
+import Container from '../objects/game/container'
+import FpsText from '../objects/game/fpsText'
+import Seeds from '../objects/game/seeds'
 import BobizCoinText from '../objects/shared/bobizCoin'
-import Catalog from '../objects/main/catalog'
-import Shop from '../objects/main/shop'
+import Catalog from '../objects/game/catalog'
+import Shop from '../objects/game/shop'
 import * as bobizCoinActions from '../state/bobizCoin'
 import * as bobizsActions from '../state/bobizs'
 import * as seedsActions from '../state/seeds'
 
 const API_SERVER = process.env.API_SERVER
 
-export default class MainScene extends Phaser.Scene {
+export default class GameScene extends Phaser.Scene {
   fpsText
   container
   seeds
@@ -22,7 +22,7 @@ export default class MainScene extends Phaser.Scene {
   initialized: boolean
 
   constructor() {
-    super({ key: 'MainScene' })
+    super({ key: 'GameScene' })
   }
 
   async create() {
@@ -49,9 +49,10 @@ export default class MainScene extends Phaser.Scene {
   }
 
   async fetchAndUpdate() {
-    let user = await fetch(`${API_SERVER}/users/0xe28cf314a7908411`).then(response => response.json())
+    const state = getState()
+    let user = await fetch(`${API_SERVER}/users/${state.user.addr}`).then(response => response.json())
     if (!user?.data)
-      user = await fetch(`${API_SERVER}/users/0xe28cf314a7908411`, { method: 'POST' }).then(response => response.json())
+      user = await fetch(`${API_SERVER}/users/${state.user.addr}`, { method: 'POST' }).then(response => response.json())
     dispatch(
       bobizsActions.update(
         user.data.bobizs.reduce((result, current) => {
