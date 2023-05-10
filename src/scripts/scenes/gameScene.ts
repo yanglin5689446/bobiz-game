@@ -5,12 +5,7 @@ import Seeds from '../objects/game/seeds'
 import BobizCoinText from '../objects/shared/bobizCoin'
 import Catalog from '../objects/game/catalog'
 import Shop from '../objects/game/shop'
-import * as bobizCoinActions from '../state/bobizCoin'
-import * as bobizsActions from '../state/bobizs'
-import * as seedsActions from '../state/seeds'
-import * as catalogActions from '../state/catalog'
-
-const API_SERVER = process.env.API_SERVER
+import syncGameStatus from '../lib/syncGameStatus'
 
 const debugMode = process.env.DEBUG === 'true'
 export default class GameScene extends Phaser.Scene {
@@ -21,7 +16,6 @@ export default class GameScene extends Phaser.Scene {
   buySeed
   shop
   catalog
-  initialized: boolean
 
   constructor() {
     super({ key: 'GameScene' })
@@ -34,14 +28,11 @@ export default class GameScene extends Phaser.Scene {
     this.shop = new Shop(this)
     this.catalog = new Catalog(this)
 
-    // initialization
-    await this.fetchAndUpdate()
-
     // initialize timer
     this.time.addEvent({
-      // polling every 5 seconds
-      delay: 5 * 1000,
-      callback: this.fetchAndUpdate,
+      // polling every 10 seconds
+      delay: 10 * 1000,
+      callback: syncGameStatus,
       callbackScope: this,
       loop: true
     })
@@ -50,29 +41,7 @@ export default class GameScene extends Phaser.Scene {
     if (debugMode) this.fpsText = new FpsText(this)
   }
 
-  async fetchAndUpdate() {
-    const state = getState()
-    let user = await fetch(`${API_SERVER}/users/${state.user.addr}`).then(response => response.json())
-    if (!user?.data)
-      user = await fetch(`${API_SERVER}/users/${state.user.addr}`, { method: 'POST' }).then(response => response.json())
-    dispatch(
-      bobizsActions.update(
-        user.data.bobizs.reduce((result, current) => {
-          result[current.id] = current
-          return result
-        }, {})
-      )
-    )
-    dispatch(seedsActions.update(user.data.seeds))
-    dispatch(bobizCoinActions.update(user.data.bobizCoin))
-    dispatch(catalogActions.update(user.data.harvested))
-    // dispatch(containerActions.updateVolume(state.container.volume))
-
-    this.initialized = true
-  }
-
   async update() {
-    if (!this.initialized) return
     this.container.update()
     if (debugMode) this.fpsText.update()
   }

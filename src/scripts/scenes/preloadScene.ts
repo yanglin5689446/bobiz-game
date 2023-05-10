@@ -1,6 +1,7 @@
 import * as fcl from '@onflow/fcl'
 import { dispatch } from '../state'
 import * as userActions from '../state/user'
+import syncGameStatus from '../lib/syncGameStatus'
 
 export default class PreloadScene extends Phaser.Scene {
   unsubscribe
@@ -28,9 +29,10 @@ export default class PreloadScene extends Phaser.Scene {
 
   create() {
     this.scene.start('ConnectWalletScene')
-    fcl.currentUser().subscribe(user => {
+    fcl.currentUser().subscribe(async user => {
       if (!user.addr) return
       dispatch(userActions.set(user))
+      await syncGameStatus()
       this.scene.stop('ConnectWalletScene')
       this.scene.start('GameScene')
     })

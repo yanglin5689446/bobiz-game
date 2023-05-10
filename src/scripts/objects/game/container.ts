@@ -1,7 +1,6 @@
-import { dispatch, getState, store } from '../../state'
-import * as seedsActions from '../../state/seeds'
-import * as bobizsActions from '../../state/bobizs'
+import { getState, store } from '../../state'
 import Bobiz from './bobiz'
+import create from '../../lib/bobiz/create'
 
 export default class Container extends Phaser.GameObjects.Container {
   static WIDTH = 300
@@ -10,7 +9,6 @@ export default class Container extends Phaser.GameObjects.Container {
   containerBody
   capacity: number
   volume: number
-  bobizCreationBuffer?: { x: number; y: number }
   bobizs: Record<string, any>
 
   unsubscribe
@@ -35,14 +33,11 @@ export default class Container extends Phaser.GameObjects.Container {
     this.containerBody.setBounce(20, 20)
     this.containerBody.setImmovable(true)
 
-    this.containerBody.setInteractive().on('pointerdown', pointer => {
+    this.containerBody.setInteractive().on('pointerup', pointer => {
       const state = getState()
       if (state.seeds.amount < 1) return
 
-      this.bobizCreationBuffer = { x: pointer.x, y: pointer.y }
-
-      dispatch(bobizsActions.create())
-      dispatch(seedsActions.update(state.seeds.amount - 1))
+      create(this, pointer)
     })
 
     // initialize surface body
@@ -57,6 +52,7 @@ export default class Container extends Phaser.GameObjects.Container {
       const state = store.getState()
       this.capacity = state.container.capacity
       this.volume = state.container.volume
+
       // destroy non-existed bobiz entities
       Object.keys(this.bobizs).map(id => {
         if (!state.bobizs.entities[id]) {
@@ -64,24 +60,17 @@ export default class Container extends Phaser.GameObjects.Container {
           delete this.bobizs[id]
         }
       })
-      // create new bobiz entities & update existing entities
-      Object.entries(state.bobizs.entities).forEach(([id, value]) => {
+      // update existing entities & create new entities
+      Object.entries(state.bobizs.entities).forEach(([id, bobizState]) => {
         if (!this.bobizs[id]) {
-          const x = this.bobizCreationBuffer ? this.bobizCreationBuffer.x - this.x : Math.random() * Container.WIDTH
-          const y = this.bobizCreationBuffer ? this.bobizCreationBuffer.y - this.y : Math.random() * Container.HEIGHT
           this.bobizs[id] = new Bobiz(this.scene, {
-            ...value,
+            ...bobizState,
             id,
-            x,
-            y
+            x: Math.random() * Container.WIDTH,
+            y: Math.random() * Container.HEIGHT
           })
-          this.add(this.bobizs[id])
-          this.scene.physics.add.existing(this.bobizs[id])
-
-          this.bobizCreationBuffer = undefined
-        } else {
-          this.bobizs[id].update(state.bobizs.entities[id].absorbed)
         }
+        this.bobizs[id].update(bobizState)
       })
     }
 
