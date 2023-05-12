@@ -8,10 +8,14 @@ interface BobizProperty {
 
 export interface BobizState {
   entities: Record<string, BobizProperty>
+  harvested: string[]
+  created: string[]
 }
 
 const initialState: BobizState = {
-  entities: {}
+  entities: {},
+  harvested: [],
+  created: []
 }
 
 export const bobizsSlice = createSlice({
@@ -23,14 +27,20 @@ export const bobizsSlice = createSlice({
     },
     create(state, action) {
       state.entities[action.payload.id] = action.payload
+      state.created.push(action.payload.id)
     },
-    remove(state, action) {
+    harvest(state, action) {
       delete state.entities[action.payload]
+      state.harvested.push(action.payload)
+    },
+    resetDelta(state) {
+      state.harvested = []
+      state.created = []
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { update, remove, create } = bobizsSlice.actions
+export const { update, harvest, create, resetDelta } = bobizsSlice.actions
 
 export default bobizsSlice.reducer

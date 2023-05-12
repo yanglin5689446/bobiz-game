@@ -1,6 +1,8 @@
-import { getState, store } from '../../state'
+import uuid from 'react-uuid'
 import Bobiz from './bobiz'
-import create from '../../lib/bobiz/create'
+import { dispatch, getState, store } from '../../state'
+import * as bobizsActions from '../../state/bobizs'
+import * as seedsActions from '../../state/seeds'
 
 export default class Container extends Phaser.GameObjects.Container {
   static WIDTH = 300
@@ -37,7 +39,27 @@ export default class Container extends Phaser.GameObjects.Container {
       const state = getState()
       if (state.seeds.amount < 1) return
 
-      create(this, pointer)
+      dispatch(seedsActions.update(state.seeds.amount - 1))
+
+      const id = uuid()
+
+      // create a 'fake' bobiz for UI, will update later when syncing with backend
+      const tempOrbizData = {
+        id,
+        capacity: 1e10,
+        absorbed: 0,
+        variant: 0
+      }
+
+      this.bobizs[id] = new Bobiz(this.scene, {
+        ...tempOrbizData,
+        x: pointer.x - this.x,
+        y: pointer.y - this.y
+      })
+      this.add(this.bobizs[id])
+      this.scene.physics.add.existing(this.bobizs[id])
+
+      dispatch(bobizsActions.create(tempOrbizData))
     })
 
     // initialize surface body

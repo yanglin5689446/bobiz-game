@@ -1,4 +1,5 @@
-import harvest from '../../lib/bobiz/harvest'
+import { dispatch } from '../../state'
+import { harvest } from '../../state/bobizs'
 
 export default class Bobiz extends Phaser.Physics.Arcade.Image {
   id
@@ -30,9 +31,9 @@ export default class Bobiz extends Phaser.Physics.Arcade.Image {
     this.setAngularVelocity((Math.random() - 0.5) * 100)
 
     this.setInteractive().on('pointerup', () => {
-      const stage = Math.ceil(this.absorbed / amountRequiredPerStage)
+      const stage = Math.ceil(this.absorbed / Bobiz.getAmountRequiredPerStage(this.capacity))
       if (stage === 4) {
-        harvest(id)
+        dispatch(harvest(id))
       }
     })
   }
@@ -46,5 +47,7 @@ export default class Bobiz extends Phaser.Physics.Arcade.Image {
     if (this.absorbed >= this.capacity) this.absorbed = this.capacity
     const stage = Math.ceil(this.absorbed / amountRequiredPerStage)
     this.setTexture(`bobiz-${stage === 4 ? this.variant : `stage-${stage}`}`)
+    this.setSize(8 * (stage + 1), 8 * (stage + 1))
+    this.setDisplaySize(8 * (stage + 1), 8 * (stage + 1))
   }
 }
