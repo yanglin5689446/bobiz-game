@@ -1,6 +1,5 @@
-import { dispatch, getState, store } from '../../state'
-import * as bobizCoinActions from '../../state/bobizCoin'
-import * as seedsActions from '../../state/seeds'
+import buySeeds from '../../lib/buySeeds'
+import { store } from '../../state'
 
 export default class Seed extends Phaser.GameObjects.Container {
   unsubscribe: () => void
@@ -28,13 +27,6 @@ export default class Seed extends Phaser.GameObjects.Container {
     this.text = new Phaser.GameObjects.Text(scene, 70, 30, 'Seed', { color: 'black', fontSize: '28px' })
     this.text.setOrigin(0, 0.5)
     this.text.setPadding(5, 10, 5, 10)
-    this.text.setInteractive().on('pointerdown', () => {
-      const state = getState()
-      if (state.bobizCoin.amount < 5) return
-
-      dispatch(seedsActions.update(state.seeds.amount + 1))
-      dispatch(bobizCoinActions.add(-5))
-    })
     this.add(this.text)
 
     this.hint = new Phaser.GameObjects.Text(scene, 75, 55, 'You have: 0', { color: 'black', fontSize: '14px' })
@@ -52,9 +44,7 @@ export default class Seed extends Phaser.GameObjects.Container {
     })
     this.buyButtonText.setOrigin(0.5)
     this.buyButtonText.setPadding(20, 10, 20, 10)
-    this.buyButtonText.setInteractive().on('pointerdown', () => {
-      dispatch(seedsActions.buy(1))
-    })
+    this.buyButtonText.setInteractive().on('pointerdown', () => buySeeds(1))
     this.add(this.buyButtonText)
 
     const updater = () => {
