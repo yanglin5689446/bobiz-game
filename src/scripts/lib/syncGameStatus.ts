@@ -15,6 +15,9 @@ export default async function () {
     body: JSON.stringify({ bobizs: { harvested, created } })
   }).then(response => response.json())
 
+  // some errors happened
+  if (!user.data) return
+
   dispatch(bobizsActions.resetDelta())
   dispatch(
     bobizsActions.update(
