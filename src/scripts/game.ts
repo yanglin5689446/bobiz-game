@@ -35,4 +35,5 @@ window.addEventListener('load', () => {
     .put('accessNode.api', 'https://access-testnet.onflow.org')
     .put('challenge.handshake', 'https://flow-wallet-testnet.blocto.app/authn')
   const game = new Phaser.Game(config)
+  window.addEventListener('error', error => alert(JSON.stringify(error)))
 })
